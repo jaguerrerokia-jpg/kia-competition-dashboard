@@ -1,58 +1,64 @@
-"use client";
+"use client"; // <-- CORRECCIÓN 1: AÑADIDO PARA INDICAR QUE ES UN COMPONENTE DE CLIENTE
+
 import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, PieChart, Pie, Cell } from 'recharts';
 import { TrendingUp, TrendingDown, Target, Award, AlertCircle, CheckCircle } from 'lucide-react';
 
+// Datos basados en la investigación realizada
+const marketShareData = [
+  { brand: 'Toyota', share: 15.8, b2bShare: 18.2, growth: 2.1, color: '#FF6B6B' },
+  { brand: 'Volkswagen', share: 12.4, b2bShare: 16.8, growth: -1.5, color: '#4ECDC4' },
+  { brand: 'KIA', share: 5.9, b2bShare: 8.3, growth: 4.3, color: '#45B7D1' },
+  { brand: 'Hyundai', share: 5.2, b2bShare: 7.1, growth: 3.8, color: '#96CEB4' },
+  { brand: 'Ford', share: 4.8, b2bShare: 9.2, growth: -2.3, color: '#FFEAA7' },
+  { brand: 'Nissan', share: 4.5, b2bShare: 6.8, growth: -1.8, color: '#DDA0DD' },
+  { brand: 'Renault', share: 4.2, b2bShare: 5.9, growth: 1.2, color: '#F39C12' },
+  { brand: 'Peugeot', share: 3.9, b2bShare: 5.4, growth: 0.8, color: '#E74C3C' }
+];
+
+const competitorProfiles = {
+  Toyota: {
+    strengths: ['Fiabilidad reconocida', 'Red de servicios extensa', 'Híbridos consolidados', 'Valor de reventa alto'],
+    weaknesses: ['Precios premium', 'Diseño conservador', 'Tecnología conectada limitada'],
+    b2bStrategy: 'Enfoque en fiabilidad y costes operativos bajos',
+    priceRange: 'Premium',
+    fleetVolume: '18.2%',
+    mainModels: ['Corolla', 'RAV4', 'Hilux', 'Proace']
+  },
+  Volkswagen: {
+    strengths: ['Calidad alemana', 'Amplia gama', 'Tecnología avanzada', 'Financiación atractiva'],
+    weaknesses: ['Costes de mantenimiento', 'Complejidad técnica', 'Fiabilidad cuestionada'],
+    b2bStrategy: 'Soluciones integrales de movilidad',
+    priceRange: 'Premium',
+    fleetVolume: '16.8%',
+    mainModels: ['Golf', 'Tiguan', 'T-Roc', 'Caddy']
+  },
+  Hyundai: {
+    strengths: ['Garantía extendida', 'Relación precio-calidad', 'Diseño atractivo', 'Electrificación'],
+    weaknesses: ['Percepción de marca', 'Red de servicios menor', 'Valor de reventa'],
+    b2bStrategy: 'Competencia directa con KIA, precios agresivos',
+    priceRange: 'Medio-Alto',
+    fleetVolume: '7.1%',
+    mainModels: ['Tucson', 'i30', 'Santa Fe', 'i20']
+  },
+  Ford: {
+    strengths: ['Tradición comercial', 'Vehículos comerciales', 'Tecnología Ford Sync', 'Presencia global'],
+    weaknesses: ['Fiabilidad variable', 'Costes operativos', 'Gama reducida'],
+    b2bStrategy: 'Especialización en vehículos comerciales',
+    priceRange: 'Medio',
+    fleetVolume: '9.2%',
+    mainModels: ['Focus', 'Kuga', 'Transit', 'Ranger']
+  }
+};
+
+// <-- CORRECCIÓN 2A: DEFINIMOS UN TIPO ESPECÍFICO PARA LOS NOMBRES DE COMPETIDORES
+type CompetitorName = keyof typeof competitorProfiles;
+
 const KIACompetitionAnalysis = () => {
   const [selectedView, setSelectedView] = useState('overview');
-  const [selectedCompetitor, setSelectedCompetitor] = useState('Toyota');
-
-  // Datos basados en la investigación realizada
-  const marketShareData = [
-    { brand: 'Toyota', share: 15.8, b2bShare: 18.2, growth: 2.1, color: '#FF6B6B' },
-    { brand: 'Volkswagen', share: 12.4, b2bShare: 16.8, growth: -1.5, color: '#4ECDC4' },
-    { brand: 'KIA', share: 5.9, b2bShare: 8.3, growth: 4.3, color: '#45B7D1' },
-    { brand: 'Hyundai', share: 5.2, b2bShare: 7.1, growth: 3.8, color: '#96CEB4' },
-    { brand: 'Ford', share: 4.8, b2bShare: 9.2, growth: -2.3, color: '#FFEAA7' },
-    { brand: 'Nissan', share: 4.5, b2bShare: 6.8, growth: -1.8, color: '#DDA0DD' },
-    { brand: 'Renault', share: 4.2, b2bShare: 5.9, growth: 1.2, color: '#F39C12' },
-    { brand: 'Peugeot', share: 3.9, b2bShare: 5.4, growth: 0.8, color: '#E74C3C' }
-  ];
-
-  const competitorProfiles = {
-    Toyota: {
-      strengths: ['Fiabilidad reconocida', 'Red de servicios extensa', 'Híbridos consolidados', 'Valor de reventa alto'],
-      weaknesses: ['Precios premium', 'Diseño conservador', 'Tecnología conectada limitada'],
-      b2bStrategy: 'Enfoque en fiabilidad y costes operativos bajos',
-      priceRange: 'Premium',
-      fleetVolume: '18.2%',
-      mainModels: ['Corolla', 'RAV4', 'Hilux', 'Proace']
-    },
-    Volkswagen: {
-      strengths: ['Calidad alemana', 'Amplia gama', 'Tecnología avanzada', 'Financiación atractiva'],
-      weaknesses: ['Costes de mantenimiento', 'Complejidad técnica', 'Fiabilidad cuestionada'],
-      b2bStrategy: 'Soluciones integrales de movilidad',
-      priceRange: 'Premium',
-      fleetVolume: '16.8%',
-      mainModels: ['Golf', 'Tiguan', 'T-Roc', 'Caddy']
-    },
-    Hyundai: {
-      strengths: ['Garantía extendida', 'Relación precio-calidad', 'Diseño atractivo', 'Electrificación'],
-      weaknesses: ['Percepción de marca', 'Red de servicios menor', 'Valor de reventa'],
-      b2bStrategy: 'Competencia directa con KIA, precios agresivos',
-      priceRange: 'Medio-Alto',
-      fleetVolume: '7.1%',
-      mainModels: ['Tucson', 'i30', 'Santa Fe', 'i20']
-    },
-    Ford: {
-      strengths: ['Tradición comercial', 'Vehículos comerciales', 'Tecnología Ford Sync', 'Presencia global'],
-      weaknesses: ['Fiabilidad variable', 'Costes operativos', 'Gama reducida'],
-      b2bStrategy: 'Especialización en vehículos comerciales',
-      priceRange: 'Medio',
-      fleetVolume: '9.2%',
-      mainModels: ['Focus', 'Kuga', 'Transit', 'Ranger']
-    }
-  };
+  
+  // <-- CORRECCIÓN 2B: USAMOS EL NUEVO TIPO EN LUGAR DE UN 'string' GENÉRICO
+  const [selectedCompetitor, setSelectedCompetitor] = useState<CompetitorName>('Toyota');
 
   const radarData = [
     { subject: 'Precio/Valor', KIA: 85, competitor: competitorProfiles[selectedCompetitor] ? 65 : 70 },
@@ -201,7 +207,7 @@ const KIACompetitionAnalysis = () => {
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
               <h3 className="text-lg font-semibold text-white mb-4">Seleccionar Competidor para Análisis:</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                {Object.keys(competitorProfiles).map(competitor => (
+                {(Object.keys(competitorProfiles) as CompetitorName[]).map(competitor => (
                   <button
                     key={competitor}
                     onClick={() => setSelectedCompetitor(competitor)}
