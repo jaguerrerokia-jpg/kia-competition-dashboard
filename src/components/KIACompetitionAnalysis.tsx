@@ -189,10 +189,11 @@ const KIACompetitionAnalysis = () => {
                       contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}
                       labelStyle={{ color: '#e2e8f0' }}
                     />
-                    <Bar 
-                      dataKey="growth" 
-                      fill={(entry) => entry.growth > 0 ? '#10b981' : '#ef4444'}
-                    />
+                    <Bar dataKey="growth">
+  {marketShareData.map((entry, index) => (
+    <Cell key={`cell-${index}`} fill={entry.growth > 0 ? '#10b981' : '#ef4444'} />
+  ))}
+</Bar>
                   </BarChart>
                 </ResponsiveContainer>
               </div>
